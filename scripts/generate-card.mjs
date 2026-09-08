@@ -7,12 +7,15 @@
 // Esto crea tarjeta.pdf en la raíz del proyecto: una hoja A4 con la tarjeta
 // centrada (10x15cm) y marcas en las esquinas para guiarte al cortar. El
 // título y subtítulo salen de src/lib/content.ts (cardTitle / cardSubtitle).
+// El corazón y la tortita son los emojis reales (renderizados a imagen una
+// sola vez y guardados en scripts/assets/) — no dibujitos vectoriales, ya
+// que las fuentes estándar de PDF no tienen glifos de emoji a color.
 //
 // Al imprimir: elegí "Tamaño real" / 100% (NO "ajustar a la página" ni
 // "encoger para ajustar"), así el QR queda del tamaño correcto y escanea
 // bien apenas se acerque el celular.
 
-import { PDFDocument, StandardFonts, rgb, degrees } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import QRCode from "qrcode";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -33,9 +36,7 @@ const CARD_H = 150 * MM;
 
 const ROSE_DARK = rgb(0.62, 0.07, 0.22);
 const ROSE_MED = rgb(0.88, 0.29, 0.42);
-const ROSE_SOFT = rgb(0.96, 0.75, 0.8);
 const ROSE_BG = rgb(1, 0.9, 0.94); // fondo rosadito de toda la tarjeta
-const GOLD = rgb(0.95, 0.72, 0.25); // llamita de la velita
 const GRAY = rgb(0.45, 0.4, 0.41);
 const TICK_GRAY = rgb(0.6, 0.6, 0.6);
 
@@ -59,6 +60,12 @@ const italicFont = await pdfDoc.embedFont(StandardFonts.TimesRomanItalic);
 const sansFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 const qrImage = await pdfDoc.embedPng(qrPng);
 
+const assetsDir = path.join(process.cwd(), "scripts", "assets");
+const heartPng = await fs.readFile(path.join(assetsDir, "heart.png"));
+const cakePng = await fs.readFile(path.join(assetsDir, "cake.png"));
+const heartImage = await pdfDoc.embedPng(heartPng);
+const cakeImage = await pdfDoc.embedPng(cakePng);
+
 function drawCentered(text, font, size, y, color) {
   const textWidth = font.widthOfTextAtSize(text, size);
   page.drawText(text, {
@@ -70,67 +77,11 @@ function drawCentered(text, font, size, y, color) {
   });
 }
 
-/**
- * Corazón hecho con formas simples de pdf-lib (dos círculos + un cuadrado
- * rotado 45°), no con el emoji ❤️: las fuentes estándar de PDF (Helvetica,
- * Times) no incluyen emojis, así que se ve un signo de pregunta o nada.
- * drawRectangle rota alrededor de su esquina (x, y), no de su centro, por
- * eso la cuenta de "y" del cuadrado usa Math.SQRT1_2 para que el cuadrado
- * rotado quede centrado justo donde se tocan los dos círculos.
- */
-function drawHeart(cx, cy, size, color) {
-  const r = size * 0.3;
-  const lobeY = cy + size * 0.15;
-  const separation = r * 0.85; // < r*2 a propósito, para que los círculos se superpongan bien
-
-  page.drawEllipse({ x: cx - separation, y: lobeY, xScale: r, yScale: r, color });
-  page.drawEllipse({ x: cx + separation, y: lobeY, xScale: r, yScale: r, color });
-
-  const s = r * 1.9;
-  const squareCenterY = lobeY - r * 0.35;
-  page.drawRectangle({
-    x: cx,
-    y: squareCenterY - s * Math.SQRT1_2,
-    width: s,
-    height: s,
-    rotate: degrees(45),
-    color,
-  });
-}
-
-/** Tortita de cumpleaños con una velita, también con formas simples. */
-function drawCake(cx, cy, width) {
-  const bodyW = width;
-  const bodyH = width * 0.5;
-  const baseW = width * 1.15;
-  const baseH = width * 0.08;
-  const frostingH = bodyH * 0.22;
-  const candleW = width * 0.07;
-  const candleH = width * 0.2;
-
-  page.drawRectangle({ x: cx - baseW / 2, y: cy, width: baseW, height: baseH, color: ROSE_DARK });
-  page.drawRectangle({ x: cx - bodyW / 2, y: cy + baseH, width: bodyW, height: bodyH, color: ROSE_MED });
-  page.drawRectangle({
-    x: cx - bodyW / 2,
-    y: cy + baseH + bodyH - frostingH,
-    width: bodyW,
-    height: frostingH,
-    color: ROSE_SOFT,
-  });
-  page.drawRectangle({
-    x: cx - candleW / 2,
-    y: cy + baseH + bodyH,
-    width: candleW,
-    height: candleH,
-    color: ROSE_DARK,
-  });
-  page.drawEllipse({
-    x: cx,
-    y: cy + baseH + bodyH + candleH + width * 0.06,
-    xScale: width * 0.05,
-    yScale: width * 0.07,
-    color: GOLD,
-  });
+/** Dibuja una imagen (los emojis) centrada en (cx, cy), respetando su relación de aspecto real. */
+function drawEmoji(image, cx, cy, targetHeight) {
+  const h = targetHeight;
+  const w = h * (image.width / image.height);
+  page.drawImage(image, { x: cx - w / 2, y: cy - h / 2, width: w, height: h });
 }
 
 // Fondo rosadito de toda la tarjeta (va primero, atrás de todo lo demás).
@@ -176,8 +127,8 @@ page.drawRectangle({
 });
 
 // Corazón arriba, tortita abajo.
-drawHeart(originX + CARD_W / 2, originY + 124 * MM, 20 * MM, ROSE_DARK);
-drawCake(originX + CARD_W / 2, originY + 11 * MM, 16 * MM);
+drawEmoji(heartImage, originX + CARD_W / 2, originY + 128 * MM, 20 * MM);
+drawEmoji(cakeImage, originX + CARD_W / 2, originY + 15 * MM, 18 * MM);
 
 // Textos.
 drawCentered(content.cardTitle, italicFont, 21, 106 * MM, ROSE_DARK);

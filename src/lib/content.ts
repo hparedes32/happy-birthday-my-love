@@ -27,10 +27,10 @@ export const content = {
   // Mientras no pongas la foto real, se muestra un cartel avisando que falta.
   // --------------------------------------------------------------------------
   photos: [
-    { src: "/photos/1.jpg", caption: "Nuestra primera foto juntos" },
-    { src: "/photos/2.jpg", caption: "Ese viaje que no vamos a olvidar" },
-    { src: "/photos/3.jpg", caption: "Riéndonos como siempre" },
-    { src: "/photos/4.jpg", caption: "Mi lugar favorito: con vos" },
+    { src: "/photos/1.JPEG", caption: "Nuestra primera foto juntos" },
+    { src: "/photos/2.JPEG", caption: "Ese viaje que no vamos a olvidar" },
+    { src: "/photos/3.JPEG", caption: "Riéndonos como siempre" },
+    { src: "/photos/4.JPEG", caption: "Mi lugar favorito: con vos" },
   ],
 
   // --------------------------------------------------------------------------
