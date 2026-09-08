@@ -40,7 +40,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       className={`${quicksand.variable} ${dancingScript.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <div aria-hidden className="app-background fixed inset-0 -z-10" />
+        {children}
+      </body>
     </html>
   );
 }

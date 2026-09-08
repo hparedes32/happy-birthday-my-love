@@ -14,17 +14,11 @@
 }
 
 /* Esta página tiene una estética fija (rosa/romántica) a propósito,
-   sin importar si el celular de quien la abre está en modo oscuro. */
+   sin importar si el celular de quien la abre está en modo oscuro.
+   Fondo sólido de respaldo por si algo tarda en pintar la capa fija de
+   abajo (primer frame, rebote elástico en Safari, etc.). */
 html {
-  background: radial-gradient(
-      circle at 50% 0%,
-      #ffd7e0 0%,
-      transparent 55%
-    ),
-    linear-gradient(180deg, #fff3f5 0%, #ffe3ea 45%, #ffd0dd 100%);
-  /* En Safari mobile, si el fondo solo está en <body>, hacer scroll de más
-     (el "rebote" elástico) puede dejar ver blanco detrás: repetirlo acá
-     asegura que siempre haya color, se use el que se use para pintar. */
+  background: #ffd7e0;
   min-height: 100%;
 }
 
@@ -32,6 +26,20 @@ body {
   color: var(--foreground);
   min-height: 100dvh;
   overscroll-behavior-y: none;
+}
+
+/* El degradé real vive en una capa fixed aparte (ver layout.tsx), no como
+   "background" de html/body: así queda anclada a la pantalla de forma
+   inequívoca en todos los navegadores mientras el contenido scrollea
+   arriba, en vez de depender del comportamiento especial (y no siempre
+   consistente) que los navegadores le dan al fondo del elemento raíz. */
+.app-background {
+  background: radial-gradient(
+      circle at 50% 0%,
+      #ffd7e0 0%,
+      transparent 55%
+    ),
+    linear-gradient(180deg, #fff3f5 0%, #ffe3ea 45%, #ffd0dd 100%);
 }
 
 ::selection {

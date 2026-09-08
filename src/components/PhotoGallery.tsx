@@ -10,7 +10,7 @@ interface Photo {
   caption?: string;
 }
 
-const AUTOPLAY_MS = 5000;
+const AUTOPLAY_MS = 8000;
 
 // Variantes "dinámicas": cada función recibe el `custom` que le pasamos al
 // motion.div (la dirección del swipe) y devuelve hacia dónde entra/sale.
