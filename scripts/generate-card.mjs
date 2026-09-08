@@ -6,13 +6,13 @@
 //
 // Esto crea tarjeta.pdf en la raíz del proyecto: una hoja A4 con la tarjeta
 // centrada (10x15cm) y marcas en las esquinas para guiarte al cortar. El
-// nombre que aparece es el que pusiste en src/lib/content.ts (girlfriendName).
+// título y subtítulo salen de src/lib/content.ts (cardTitle / cardSubtitle).
 //
 // Al imprimir: elegí "Tamaño real" / 100% (NO "ajustar a la página" ni
 // "encoger para ajustar"), así el QR queda del tamaño correcto y escanea
 // bien apenas se acerque el celular.
 
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb, degrees } from "pdf-lib";
 import QRCode from "qrcode";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -34,6 +34,8 @@ const CARD_H = 150 * MM;
 const ROSE_DARK = rgb(0.62, 0.07, 0.22);
 const ROSE_MED = rgb(0.88, 0.29, 0.42);
 const ROSE_SOFT = rgb(0.96, 0.75, 0.8);
+const ROSE_BG = rgb(1, 0.9, 0.94); // fondo rosadito de toda la tarjeta
+const GOLD = rgb(0.95, 0.72, 0.25); // llamita de la velita
 const GRAY = rgb(0.45, 0.4, 0.41);
 const TICK_GRAY = rgb(0.6, 0.6, 0.6);
 
@@ -68,6 +70,78 @@ function drawCentered(text, font, size, y, color) {
   });
 }
 
+/**
+ * Corazón hecho con formas simples de pdf-lib (dos círculos + un cuadrado
+ * rotado 45°), no con el emoji ❤️: las fuentes estándar de PDF (Helvetica,
+ * Times) no incluyen emojis, así que se ve un signo de pregunta o nada.
+ * drawRectangle rota alrededor de su esquina (x, y), no de su centro, por
+ * eso la cuenta de "y" del cuadrado usa Math.SQRT1_2 para que el cuadrado
+ * rotado quede centrado justo donde se tocan los dos círculos.
+ */
+function drawHeart(cx, cy, size, color) {
+  const r = size * 0.3;
+  const lobeY = cy + size * 0.15;
+  const separation = r * 0.85; // < r*2 a propósito, para que los círculos se superpongan bien
+
+  page.drawEllipse({ x: cx - separation, y: lobeY, xScale: r, yScale: r, color });
+  page.drawEllipse({ x: cx + separation, y: lobeY, xScale: r, yScale: r, color });
+
+  const s = r * 1.9;
+  const squareCenterY = lobeY - r * 0.35;
+  page.drawRectangle({
+    x: cx,
+    y: squareCenterY - s * Math.SQRT1_2,
+    width: s,
+    height: s,
+    rotate: degrees(45),
+    color,
+  });
+}
+
+/** Tortita de cumpleaños con una velita, también con formas simples. */
+function drawCake(cx, cy, width) {
+  const bodyW = width;
+  const bodyH = width * 0.5;
+  const baseW = width * 1.15;
+  const baseH = width * 0.08;
+  const frostingH = bodyH * 0.22;
+  const candleW = width * 0.07;
+  const candleH = width * 0.2;
+
+  page.drawRectangle({ x: cx - baseW / 2, y: cy, width: baseW, height: baseH, color: ROSE_DARK });
+  page.drawRectangle({ x: cx - bodyW / 2, y: cy + baseH, width: bodyW, height: bodyH, color: ROSE_MED });
+  page.drawRectangle({
+    x: cx - bodyW / 2,
+    y: cy + baseH + bodyH - frostingH,
+    width: bodyW,
+    height: frostingH,
+    color: ROSE_SOFT,
+  });
+  page.drawRectangle({
+    x: cx - candleW / 2,
+    y: cy + baseH + bodyH,
+    width: candleW,
+    height: candleH,
+    color: ROSE_DARK,
+  });
+  page.drawEllipse({
+    x: cx,
+    y: cy + baseH + bodyH + candleH + width * 0.06,
+    xScale: width * 0.05,
+    yScale: width * 0.07,
+    color: GOLD,
+  });
+}
+
+// Fondo rosadito de toda la tarjeta (va primero, atrás de todo lo demás).
+page.drawRectangle({
+  x: originX,
+  y: originY,
+  width: CARD_W,
+  height: CARD_H,
+  color: ROSE_BG,
+});
+
 // Marcas de corte (una crucecita en cada esquina, como en imprenta).
 const TICK = 8;
 const GAP = 3;
@@ -97,42 +171,28 @@ page.drawRectangle({
   y: originY + INSET,
   width: CARD_W - INSET * 2,
   height: CARD_H - INSET * 2,
-  borderColor: ROSE_SOFT,
+  borderColor: ROSE_MED,
   borderWidth: 1,
 });
 
-// Fila de puntitos decorativos (arriba y, en espejo, abajo).
-function dotsRow(y) {
-  const radii = [1.1, 1.6, 2.1, 1.6, 1.1].map((r) => r * MM);
-  const gap = 6 * MM;
-  const totalW = gap * (radii.length - 1);
-  radii.forEach((r, i) => {
-    page.drawEllipse({
-      x: originX + CARD_W / 2 - totalW / 2 + i * gap,
-      y: originY + y,
-      xScale: r,
-      yScale: r,
-      color: i === 2 ? ROSE_DARK : ROSE_MED,
-    });
-  });
-}
-dotsRow(128 * MM);
-dotsRow(16 * MM);
+// Corazón arriba, tortita abajo.
+drawHeart(originX + CARD_W / 2, originY + 124 * MM, 20 * MM, ROSE_DARK);
+drawCake(originX + CARD_W / 2, originY + 11 * MM, 16 * MM);
 
 // Textos.
-drawCentered(`Para ${content.girlfriendName}`, italicFont, 24, 108 * MM, ROSE_DARK);
-drawCentered("Escaneá para abrir tu regalo", sansFont, 10, 99 * MM, ROSE_MED);
+drawCentered(content.cardTitle, italicFont, 21, 106 * MM, ROSE_DARK);
+drawCentered(content.cardSubtitle, sansFont, 10, 97 * MM, ROSE_MED);
 
 // QR centrado.
-const QR_SIZE = 58 * MM;
+const QR_SIZE = 56 * MM;
 page.drawImage(qrImage, {
   x: originX + (CARD_W - QR_SIZE) / 2,
-  y: originY + 34 * MM,
+  y: originY + 36 * MM,
   width: QR_SIZE,
   height: QR_SIZE,
 });
 
-drawCentered("con la cámara de tu celular", sansFont, 9, 25 * MM, GRAY);
+drawCentered("con la cámara de tu celular", sansFont, 9, 27 * MM, GRAY);
 
 const pdfBytes = await pdfDoc.save();
 const outPath = path.join(process.cwd(), "tarjeta.pdf");
@@ -140,5 +200,5 @@ await fs.writeFile(outPath, pdfBytes);
 
 console.log(`Listo! Tarjeta generada en: ${outPath}`);
 console.log(`Apunta a: ${url}`);
-console.log(`Para: ${content.girlfriendName}`);
+console.log(`Título: ${content.cardTitle}`);
 console.log(`Al imprimir: elegí "Tamaño real" / 100% (no "ajustar a la página").`);

@@ -57,6 +57,14 @@ export const content = {
   // Si no agregás ningún archivo, no pasa nada: no aparece ningún botón.
   // --------------------------------------------------------------------------
   songSrc: "/music/song.mp3",
+
+  // --------------------------------------------------------------------------
+  // TARJETITA IMPRIMIBLE (npm run card)
+  // El título y subtítulo que van en la tarjeta de papel con el QR. Son
+  // independientes del resto (podés poner algo distinto a lo de la web).
+  // --------------------------------------------------------------------------
+  cardTitle: "¡Feliz cumple, bebé!",
+  cardSubtitle: "Escaneá para ver tu regalito",
 };
 
 export type SiteContent = typeof content;

@@ -28,7 +28,18 @@ export default function Experience() {
   };
 
   return (
-    <main className="relative isolate min-h-dvh overflow-hidden">
+    <main
+      className="relative isolate min-h-dvh overflow-hidden"
+      style={{
+        // El fondo llega hasta el borde (gracias a viewport-fit=cover en el
+        // layout), pero el contenido en sí queda adentro del área segura:
+        // así no se lo tapa el notch/Dynamic Island ni la barra inferior.
+        paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
+        paddingLeft: "env(safe-area-inset-left)",
+        paddingRight: "env(safe-area-inset-right)",
+      }}
+    >
       <audio
         ref={audioRef}
         src={content.songSrc}

@@ -28,6 +28,10 @@ export const viewport: Viewport = {
   themeColor: "#ffd0dd",
   width: "device-width",
   initialScale: 1,
+  // Sin esto, en iPhones con notch/Dynamic Island Safari no extiende el
+  // fondo debajo de la barra de estado: se ve una franja sin color arriba,
+  // como si el fondo estuviera "cortado".
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

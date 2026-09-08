@@ -23,7 +23,11 @@ export default function MusicToggle({
       animate={{ opacity: 1, scale: 1 }}
       whileTap={{ scale: 0.9 }}
       aria-label={playing ? "Pausar música" : "Reproducir música"}
-      className="fixed bottom-5 right-5 z-20 rounded-full bg-white/80 p-3 text-rose-500 shadow-lg backdrop-blur transition hover:bg-white"
+      className="fixed z-20 rounded-full bg-white/80 p-3 text-rose-500 shadow-lg backdrop-blur transition hover:bg-white"
+      style={{
+        bottom: "calc(1.25rem + env(safe-area-inset-bottom))",
+        right: "calc(1.25rem + env(safe-area-inset-right))",
+      }}
     >
       {playing ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
     </motion.button>
