@@ -37,7 +37,6 @@ const CARD_H = 150 * MM;
 const ROSE_DARK = rgb(0.62, 0.07, 0.22);
 const ROSE_MED = rgb(0.88, 0.29, 0.42);
 const ROSE_BG = rgb(1, 0.9, 0.94); // fondo rosadito de toda la tarjeta
-const GRAY = rgb(0.45, 0.4, 0.41);
 const TICK_GRAY = rgb(0.6, 0.6, 0.6);
 
 const qrPng = await QRCode.toBuffer(url, {
@@ -128,7 +127,7 @@ page.drawRectangle({
 
 // Corazón arriba, tortita abajo.
 drawEmoji(heartImage, originX + CARD_W / 2, originY + 128 * MM, 20 * MM);
-drawEmoji(cakeImage, originX + CARD_W / 2, originY + 15 * MM, 18 * MM);
+drawEmoji(cakeImage, originX + CARD_W / 2, originY + 20 * MM, 18 * MM);
 
 // Textos.
 drawCentered(content.cardTitle, italicFont, 21, 106 * MM, ROSE_DARK);
@@ -142,8 +141,6 @@ page.drawImage(qrImage, {
   width: QR_SIZE,
   height: QR_SIZE,
 });
-
-drawCentered("con la cámara de tu celular", sansFont, 9, 27 * MM, GRAY);
 
 const pdfBytes = await pdfDoc.save();
 const outPath = path.join(process.cwd(), "tarjeta.pdf");

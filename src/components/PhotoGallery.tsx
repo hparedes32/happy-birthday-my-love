@@ -41,13 +41,16 @@ export default function PhotoGallery({
     setIndexState(([current]) => [target, target > current ? 1 : -1]);
   };
 
+  // Reinicia la cuenta de AUTOPLAY_MS cada vez que cambia la foto, sea por
+  // el auto-avance o porque la persona clickeó una flecha/punto — así no
+  // se superpone un avance automático justo después de uno manual.
   useEffect(() => {
     timerRef.current = setInterval(() => go(1), AUTOPLAY_MS);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo queremos reiniciar el intervalo por cantidad de fotos
-  }, [photos.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- "go" solo depende de photos.length, ya incluido
+  }, [index, photos.length]);
 
   const photo = photos[index];
 

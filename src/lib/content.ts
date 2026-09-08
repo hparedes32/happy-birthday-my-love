@@ -31,6 +31,12 @@ export const content = {
     { src: "/photos/2.JPEG", caption: "Ese viaje que no vamos a olvidar" },
     { src: "/photos/3.JPEG", caption: "Riéndonos como siempre" },
     { src: "/photos/4.JPEG", caption: "Mi lugar favorito: con vos" },
+    { src: "/photos/5.JPEG", caption: "Una noche que quiero recordar para siempre" },
+    { src: "/photos/6.JPEG", caption: "Mi pintora favorita" },
+    { src: "/photos/7.JPEG", caption: "Los tres en camita" },
+    { src: "/photos/8.JPEG", caption: "Nuestras noches favoritas" },
+    { src: "/photos/9.JPEG", caption: "Vestidos de gala 🕯️" },
+    { src: "/photos/10.JPEG", caption: "En el cerrito juntos" },
   ],
 
   // --------------------------------------------------------------------------
