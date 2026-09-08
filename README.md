@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# happy-birthday-my-love 💕
 
-## Getting Started
+Página-regalo: se abre con un corazón para tocar, después una galería de
+fotos de ustedes dos, y termina con una carta. Pensada para compartir con
+un código QR en una tarjetita física.
 
-First, run the development server:
+## 1. Personalizarla
+
+Todo el contenido editable está en un solo archivo: [`src/lib/content.ts`](src/lib/content.ts).
+Ahí cambiás:
+
+- Su nombre y el tuyo
+- El texto de la primera pantalla
+- Las fotos (agregalas en `public/photos/` con los nombres `1.jpg`, `2.jpg`, etc. — mientras no estén, se ve un cartel avisando que falta esa foto, así que podés probar todo el flujo antes de tener las fotos definitivas)
+- El texto completo de la carta
+- Opcional: la fecha en que empezaron a salir (para mostrar "llevamos X días juntos")
+- Opcional: una canción de fondo (`public/music/song.mp3`) — arranca sola apenas toca el corazón para abrir el regalo. Si no la agregás, no aparece ningún botón de música
+
+No hace falta tocar ningún otro archivo para personalizar el contenido.
+
+## 2. Correrla en local
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrí [http://localhost:3000](http://localhost:3000). Probala también desde el celular (conectado a la misma red) para ver cómo se siente, ya que así es como la va a abrir ella.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 3. Deployarla en Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Subí el proyecto a un repo de GitHub.
+2. Entrá a [vercel.com/new](https://vercel.com/new), importá el repo y hacé deploy (no necesita variables de entorno ni configuración especial).
+3. Vercel te da una URL tipo `https://tu-proyecto.vercel.app`. Esa es la URL final.
 
-## Learn More
+## 4. Generar el QR para la tarjetita
 
-To learn more about Next.js, take a look at the following resources:
+Con la URL que te dio Vercel:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run qr -- https://tu-proyecto.vercel.app
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Esto crea `qr.png` en la raíz del proyecto: un QR grande y con buena corrección de errores, listo para usar donde quieras (por ejemplo, para armar tu propia tarjeta a mano).
 
-## Deploy on Vercel
+## 5. Generar la tarjetita lista para imprimir
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Si preferís no armar la tarjeta vos, con la misma URL:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run card -- https://tu-proyecto.vercel.app
+```
+
+Esto crea `tarjeta.pdf` en la raíz del proyecto: una hoja A4 con una tarjetita de 10x15cm centrada (con su nombre, el QR y marcas de corte en las esquinas). Al imprimir, elegí **"Tamaño real" / 100%** (no "ajustar a la página"), así el QR queda del tamaño correcto y escanea bien.
+
+## Stack
+
+Next.js (App Router) + TypeScript + Tailwind CSS + Framer Motion + pdf-lib.

@@ -36,6 +36,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# generados por "npm run qr" / "npm run card" (se regeneran cuando quieras)
+/qr.png
+/tarjeta.pdf
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
