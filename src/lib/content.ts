@@ -56,7 +56,7 @@ export const content = {
   // botón abajo a la derecha por si quiere pausarla o volver a ponerla.
   // Si no agregás ningún archivo, no pasa nada: no aparece ningún botón.
   // --------------------------------------------------------------------------
-  songSrc: "/music/song.mp3",
+  songSrc: "/music/song.m4a",
 
   // --------------------------------------------------------------------------
   // TARJETITA IMPRIMIBLE (npm run card)
