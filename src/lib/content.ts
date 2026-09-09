@@ -27,16 +27,16 @@ export const content = {
   // Mientras no pongas la foto real, se muestra un cartel avisando que falta.
   // --------------------------------------------------------------------------
   photos: [
-    { src: "/photos/1.JPEG", caption: "Nuestra primera foto juntos" },
-    { src: "/photos/2.JPEG", caption: "Ese viaje que no vamos a olvidar" },
-    { src: "/photos/3.JPEG", caption: "Riéndonos como siempre" },
-    { src: "/photos/4.JPEG", caption: "Mi lugar favorito: con vos" },
-    { src: "/photos/5.JPEG", caption: "Una noche que quiero recordar para siempre" },
-    { src: "/photos/6.JPEG", caption: "Mi pintora favorita" },
-    { src: "/photos/7.JPEG", caption: "Los tres en camita" },
-    { src: "/photos/8.JPEG", caption: "Nuestras noches favoritas" },
-    { src: "/photos/9.JPEG", caption: "Vestidos de gala 🕯️" },
-    { src: "/photos/10.JPEG", caption: "En el cerrito juntos" },
+    { src: "/photos/2.JPEG", caption: "De los primeros viajecitos juntitos" },
+    { src: "/photos/3.JPEG", caption: "Abrazaditos siempre" },
+    { src: "/photos/1.JPEG", caption: "Nuestra primera fotito juntos" },
+    { src: "/photos/4.JPEG", caption: "Enseñandote a bicicletear 🤣" },
+    { src: "/photos/5.JPEG", caption: "En el candelight de gala 😊🕯️" },
+    { src: "/photos/6.JPEG", caption: "La pintora mas linda" },
+    { src: "/photos/7.JPEG", caption: "Los tres en camita con papucho 😽" },
+    { src: "/photos/8.JPEG", caption: "Mi reina hermosa! 👑" },
+    { src: "/photos/9.JPEG", caption: "❤️😍🕯️" },
+    { src: "/photos/10.JPEG", caption: "En el cerrito juntos ❤️" },
   ],
 
   // --------------------------------------------------------------------------
@@ -45,13 +45,14 @@ export const content = {
   // Escribí lo que realmente sentís, no hay límite de largo ni de cantidad
   // de párrafos — podés borrar estos de ejemplo y poner los tuyos.
   // --------------------------------------------------------------------------
-  letterSalutation: "Para vos,",
+  letterSalutation: "Feliz cumple mi vida hermosa 😘❤️🥳",
   letterParagraphs: [
-    "Escribo esto pensando en todas las razones por las que sos tan importante para mí, y me doy cuenta de que no entran en una sola carta.",
-    "Gracias por cada día, por cada risa, por bancarme en los días difíciles y por hacer que los buenos sean todavía mejores.",
-    "Esto es solo una excusa para recordarte cuánto te quiero. Esta parte es tuya: reemplazá este texto por lo que de verdad le querés decir.",
+    "Bebe, mi idea era escribirte una cartita pero me gusto mucho esta idea tmb! 😅😊 Queria desearte un muy feliz cumpleaños amor mio! Viste q no soy de escribir mucho pero queria tomarme el tiempo para decirte lo mucho q te amo, lo importante que sos para mi y lo feliz que me haces!",
+    "Gracias por cada día sacarme una sonrisa, una carcajada! Por ver la vida de otra manera. Gracias mi compañera, la que esta en todas! En las buenas y en las  dificiles tmb, siempre ahi para apoyarme. Gracias por haber aparecido en mi vida y cambiarla completamente. ",
+    "Gracias por haber formado esta hermosa familia junto con papucho 😽 y el hogar q estamos construyendo juntos 🏠",
+    "Agradecido de tener la mejor compañera que podría pedir! Espero que festejemos muy lindo hoy 🍾 y que sea el primero de muchos cumpleañitos juntos! 🥳",
   ],
-  letterSignature: "Con todo mi amor, Tu nombre",
+  letterSignature: "Te amo con todo mi corazón... tu amorcito ❤️",
 
   // --------------------------------------------------------------------------
   // MÚSICA (opcional)
